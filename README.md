@@ -29,21 +29,33 @@ SnowSystem 独立封装
 
 📂 Project Structure
 SDL_snow/
+
 │
 ├── src/
+
 │   ├── Snow.cpp          # 程序入口
+
 │   ├── SnowSystem.h      # 雪系统接口
+
 │   └── SnowSystem.cpp    # 雪系统实现
+
 │
 ├── assets/
+
 │   ├── bg.jpg            # 城市背景图
+
 │   └── snow.png          # 暴雪用大雪花纹理（透明 PNG）
+
 │
 ├── docs/
+
 │   └── ShSnowing.gif       # 运行效果预览（可选）
+
 │
 ├── README.md
+
 └── .gitignore
+
 
 🧰 Dependencies
 
