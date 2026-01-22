@@ -12,12 +12,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies with vcpkg
+      - name: Clone vcpkg (full history)
         run: |
           git clone https://github.com/microsoft/vcpkg.git vcpkg
-          ./vcpkg/bootstrap-vcpkg.bat
-          ./vcpkg/vcpkg install
-          set VCPKG_ROOT=%CD%\vcpkg
+          cd vcpkg
+          git checkout bdbf7f5a3c10d3fbdc53c68a4d1c0f78d06f1a5a
+
+      - name: Bootstrap vcpkg
+        run: |
+          vcpkg/bootstrap-vcpkg.bat -disableMetrics
+
+      - name: Install dependencies
+        run: |
+          vcpkg/vcpkg install
 
       - name: Configure with CMake
         run: |
