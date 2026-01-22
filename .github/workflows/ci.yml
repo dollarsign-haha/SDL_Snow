@@ -1,0 +1,31 @@
+name: Build (Windows)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgDirectory: vcpkg
+
+    - name: Install dependencies
+      run: |
+        vcpkg install sdl2 sdl2-image
+
+    - name: Configure CMake
+      run: |
+        cmake -S . -B build ^
+          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+    - name: Build
+      run: |
+        cmake --build build --config Release
