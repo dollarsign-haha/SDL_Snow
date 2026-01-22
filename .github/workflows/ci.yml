@@ -1,4 +1,4 @@
-name: Build (Windows)
+name: CI
 
 on:
   push:
@@ -9,23 +9,17 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup vcpkg
-      uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgDirectory: vcpkg
+      - name: Install vcpkg
+        uses: lukka/get-vcpkg@v1
 
-    - name: Install dependencies
-      run: |
-        vcpkg install sdl2 sdl2-image
+      - name: Configure with CMake
+        run: |
+          cmake -S . -B build ^
+            -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake ^
+            -DVCPKG_TARGET_TRIPLET=x64-windows
 
-    - name: Configure CMake
-      run: |
-        cmake -S . -B build ^
-          -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
-
-    - name: Build
-      run: |
-        cmake --build build --config Release
+      - name: Build
+        run: cmake --build build --config Release
