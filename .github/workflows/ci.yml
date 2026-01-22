@@ -14,8 +14,9 @@ jobs:
 
       - name: Clone vcpkg (full history)
         run: |
-          git clone https://github.com/microsoft/vcpkg.git vcpkg
+          git clone https://github.com/microsoft/vcpkg.git vcpkg --no-single-branch
           cd vcpkg
+          git fetch --all
           git checkout bdbf7f5a3c10d3fbdc53c68a4d1c0f78d06f1a5a
 
       - name: Bootstrap vcpkg
