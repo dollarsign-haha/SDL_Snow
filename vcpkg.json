@@ -1,0 +1,9 @@
+{
+  "name": "sdl-snow",
+  "version-string": "0.1.0",
+  "dependencies": [
+    "sdl2",
+    "sdl2-image"
+  ],
+  "builtin-baseline": "bdbf7f5a3c10d3fbdc53c68a4d1c0f78d06f1a5a"
+}
