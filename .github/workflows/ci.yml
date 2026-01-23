@@ -22,6 +22,7 @@ jobs:
           vcpkg/vcpkg install sdl2 sdl2-image:x64-windows
 
       - name: Configure with CMake
+        shell: cmd
         run: |
           cmake -S . -B build ^
             -DCMAKE_TOOLCHAIN_FILE=%CD%\vcpkg\scripts\buildsystems\vcpkg.cmake ^
