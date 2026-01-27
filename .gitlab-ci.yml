@@ -1,0 +1,51 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  BUILD_DIR: build
+  VCPKG_ROOT: "D:/Kathy/CPP/vcpkg/vcpkg"
+  CMAKE_GENERATOR: "Visual Studio 16 2019"
+
+default:
+  tags:
+    - windows
+  before_script:
+    - echo "Runner is running on Windows"
+    - cmake --version
+
+build:
+  stage: build
+  script:
+    - echo "=== Configure project ==="
+    - cmake -S . -B %BUILD_DIR% ^
+        -G "%CMAKE_GENERATOR%" ^
+        -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake
+    - echo "=== Build project ==="
+    - cmake --build %BUILD_DIR% --config Debug
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 week
+
+test:
+  stage: test
+  script:
+    - echo "=== Run tests ==="
+    - if exist build\\Debug\\SDL_snow.exe (
+        build\\Debug\\SDL_snow.exe --help
+      ) else (
+        echo "Executable not found!" & exit /b 1
+      )
+
+deploy:
+  stage: deploy
+  script:
+    - echo "=== Deploy step ==="
+    - mkdir deploy
+    - copy build\\Debug\\SDL_snow.exe deploy\\
+    - echo "Deploy finished"
+  artifacts:
+    paths:
+      - deploy/
