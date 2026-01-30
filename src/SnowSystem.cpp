@@ -2,18 +2,45 @@
 #include <SDL_image.h>
 #include <cstdlib>
 
-void SnowSystem::init(SDL_Renderer* renderer, int w, int h) {
+bool SnowSystem::init(SDL_Renderer* renderer, int w, int h)
+{
+    // 1. 参数校验（CI 非常重要）
+    if (!renderer) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+            "SnowSystem::init failed: renderer is null");
+        return false;
+    }
+
+    if (w <= 0 || h <= 0) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+            "SnowSystem::init failed: invalid size %dx%d", w, h);
+        return false;
+    }
+
     width = w;
     height = h;
 
+    // 2. 加载雪花纹理
     snowTexture = IMG_LoadTexture(renderer, "assets/snow_fat.png");
+    if (!snowTexture) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+            "Failed to load snow texture: %s", IMG_GetError());
+        return false;
+    }
 
+    // 3. 初始化雪花数据
+    flakes.clear();
     flakes.resize(config.maxFlakes);
+
     for (auto& f : flakes) {
         resetFlake(f);
         f.y = static_cast<float>(rand() % height);
     }
+
+    SDL_Log("SnowSystem initialized: %zu flakes", flakes.size());
+    return true;
 }
+
 
 void SnowSystem::resetFlake(Snowflake& f) {
     f.x = static_cast<float>(rand() % width);

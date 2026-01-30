@@ -17,7 +17,7 @@ struct SnowConfig {
 
 class SnowSystem {
 public:
-    void init(SDL_Renderer* renderer, int w, int h);
+    bool init(SDL_Renderer* renderer, int w, int h);
     void update(float dt);
     void render(SDL_Renderer* renderer);
 
